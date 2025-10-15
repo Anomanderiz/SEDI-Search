@@ -1,86 +1,18 @@
 :root{
-  /* Brand */
-  --major: #CC0633;         /* button fills, glass tint */
-  --accent: #A6192E;        /* borders, highlights */
-  --text: #ffffff;
-
-  /* Glass */
-  --glass-bg: rgba(204, 6, 51, 0.22);   /* major colour with alpha */
+  --major:#CC0633; --accent:#A6192E; --text:#ffffff;
+  --glass-bg: rgba(204,6,51,0.22);
   --glass-border: rgba(255,255,255,0.20);
   --shadow: 0 14px 40px rgba(0,0,0,0.35);
 }
-
-/* Background image layer */
-html, body { height: 100%; }
-body{
-  color: var(--text);
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: transparent;
-}
-
-/* Full-bleed background image + soft dark overlay for contrast */
-body::before{
-  content:"";
-  position: fixed; inset: 0;
-  background: url("BG.png") center/cover no-repeat fixed;
-  z-index: -2;
-}
-body::after{
-  content:"";
-  position: fixed; inset: 0;
-  background: linear-gradient(180deg, rgba(0,0,0,0.38), rgba(0,0,0,0.38));
-  z-index: -1;
-}
-
-/* Glass cards */
-.glass{
-  background: var(--glass-bg);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-  border: 1px solid var(--glass-border);
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-}
-
-/* Headings and links */
-.card-title{ font-weight:700; letter-spacing:.2px; color: var(--text); }
-a, .link{ color: var(--text); text-decoration-color: var(--accent); }
-a:hover{ opacity:.85; }
-
-/* Buttons */
-.btn-primary{
-  background: var(--major);
-  color: var(--text);
-  border: 1px solid var(--accent);
-}
-.btn-primary:hover{ filter: brightness(1.05); }
-.btn-secondary, .btn-outline{
-  background: transparent;
-  color: var(--text);
-  border: 1px solid var(--accent);
-}
-.btn-secondary:hover, .btn-outline:hover{ background: rgba(166,25,46,0.15); }
-
-/* Inputs */
-input, select, textarea{
-  color: #111; /* keep controls readable */
-}
-.form-label, .shiny-input-container label{
-  color: var(--text);
-}
-
-/* Tables */
-table{ color: var(--text); }
-table.dataframe{
-  background: transparent;
-}
-table.dataframe th, table.dataframe td{
-  background: rgba(0,0,0,0.25);
-  border-color: rgba(255,255,255,0.14);
-}
-
-/* Badges for scores */
-.badge-score{ padding:2px 10px; border-radius:999px; border:1px solid var(--glass-border); }
-.badge-high{ color:#0be881; }
-.badge-review{ color:#ffd32a; }
-.badge-low{ color:#ff5e57; }
+html,body{height:100%;}
+body{color:var(--text);font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:transparent;overflow-y:auto;}
+body::before{content:'';position:fixed;inset:0;background:url('BG.png') center/cover no-repeat fixed;z-index:-2;}
+body::after{content:'';position:fixed;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.38),rgba(0,0,0,0.38));z-index:-1;}
+.glass{background:var(--glass-bg);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--glass-border);border-radius:18px;box-shadow:var(--shadow);}
+.card-title{font-weight:700;letter-spacing:.2px;color:var(--text);}
+.btn-primary{background:var(--major);color:var(--text);border:1px solid var(--accent);} .btn-primary:hover{filter:brightness(1.05);}
+.btn-secondary,.btn-outline{background:transparent;color:var(--text);border:1px solid var(--accent);} .btn-secondary:hover,.btn-outline:hover{background:rgba(166,25,46,0.15);}
+.form-label,.shiny-input-container label{color:var(--text);} input,select,textarea{color:#111;}
+table{color:var(--text);} table.dataframe{background:transparent;}
+table.dataframe th,table.dataframe td{background:rgba(0,0,0,0.25);border-color:rgba(255,255,255,0.14);}
+.badge-score{padding:2px 10px;border-radius:999px;border:1px solid var(--glass-border);} .badge-high{color:#0be881;} .badge-review{color:#ffd32a;} .badge-low{color:#ff5e57;}
