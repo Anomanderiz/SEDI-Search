@@ -9,6 +9,12 @@ from matching.matcher import match_transactions_to_donors, Thresholds
 app_title = "SEDI Insider Monitor"
 
 # ---- UI ----
+# Global CSS include
+from shiny import ui
+page_head = ui.head_content(
+    ui.tags.link(rel="stylesheet", href="styles.css")
+)
+
 page = ui.page_navbar(
     ui.nav_panel("Upload & Parse", ui.layout_columns(
         ui.card(
@@ -19,6 +25,8 @@ page = ui.page_navbar(
             ui.input_file("sedi_pdf", "SEDI Weekly PDF", multiple=False, accept=[".pdf"], width="100%"),
             ui.input_action_button("parse", "Parse PDF & Match", class_="btn-primary"),
             class_="glass",
+            title=app_title,
+            head=page_head,
         ),
         ui.card(
             ui.h4("Parsing summary", class_='card-title'),
