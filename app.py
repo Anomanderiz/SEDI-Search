@@ -1,16 +1,10 @@
-from __future__ import annotations
-
-import io
-import pandas as pd
 from shiny import App, ui, render, reactive
 from parsers.sedi_weekly_pdf import parse_sedi_pdf
 from matching.matcher import match_transactions_to_donors, Thresholds
 
 app_title = "SEDI Insider Monitor"
 
-# ---- UI ----
-# Global CSS include
-from shiny import ui
+# Global CSS include (file should be at www/styles.css)
 page_head = ui.head_content(
     ui.tags.link(rel="stylesheet", href="styles.css")
 )
@@ -18,15 +12,15 @@ page_head = ui.head_content(
 page = ui.page_navbar(
     ui.nav_panel("Upload & Parse", ui.layout_columns(
         ui.card(
-            ui.tags.link(rel='stylesheet', href='ui/styles.css'),
+            # REMOVED: ui.tags.link(...) here
             ui.h3(app_title, class_='card-title'),
             ui.p("Upload a donor roster (CSV/XLSX) and the SEDI Weekly Summary PDF. Then click Parse."),
             ui.input_file("donor_file", "Donor roster (CSV or XLSX)", multiple=False, accept=[".csv", ".xlsx"], width="100%"),
             ui.input_file("sedi_pdf", "SEDI Weekly PDF", multiple=False, accept=[".pdf"], width="100%"),
             ui.input_action_button("parse", "Parse PDF & Match", class_="btn-primary"),
             class_="glass",
-            title=app_title,
-            head=page_head,
+            title=app_title,    # ok to keep if you want a card header
+            # REMOVED: head=page_head
         ),
         ui.card(
             ui.h4("Parsing summary", class_='card-title'),
@@ -64,7 +58,9 @@ This prototype parses the weekly SEDI PDF and performs fuzzy name matching again
         col_widths=(12,)
     )),
     title=app_title,
+    head=page_head,   # ← moved here
 )
+
 
 # ---- Server ----
 
