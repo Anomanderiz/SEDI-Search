@@ -4,6 +4,29 @@ from shiny import App, ui, render, reactive
 from parsers.sedi_weekly_pdf import parse_sedi_pdf
 from matching.matcher import match_transactions_to_donors, Thresholds
 from pathlib import Path
+# --- add near the top (below imports) ---
+from pathlib import Path
+import io, os
+
+def _read_upload(uf) -> bytes:
+    """Accept Shiny FileInfo or a plain dict and return bytes."""
+    # Newer Shiny: FileInfo object with .read()
+    if hasattr(uf, "read"):
+        return uf.read()
+    # Older/bare: dict with a temp file path
+    if isinstance(uf, dict):
+        for key in ("datapath", "path"):
+            p = uf.get(key)
+            if p and os.path.exists(p):
+                with open(p, "rb") as f:
+                    return f.read()
+    raise TypeError(f"Unsupported upload object: {type(uf)!r}")
+
+def _first_existing(*paths: str | Path) -> str:
+    for p in map(Path, paths):
+        if p.exists():
+            return str(p)
+    raise FileNotFoundError("Could not locate titles/nicknames config files.")
 
 APP_DIR = Path(__file__).parent.resolve()
 STATIC_DIR = APP_DIR / "www"   # absolute path to your static folder
@@ -70,7 +93,7 @@ def server(input, output, session):
                 status_txt.set("No donor file selected."); donors = pd.DataFrame()
             else:
                 uf = dfile[0]
-                content = uf.read()
+                content = _read_upload(uf)
                 try:
                     donors = pd.read_csv(io.BytesIO(content))
                 except Exception:
@@ -105,7 +128,7 @@ def server(input, output, session):
                 status_txt.set("No PDF selected."); tx = pd.DataFrame()
             else:
                 uf = pfile[0]
-                pdfbytes = uf.read()
+                pdfbytes = _read_upload(uf)
                 tx = parse_sedi_pdf(pdfbytes)
             transactions_df.set(tx)
 
