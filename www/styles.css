@@ -16,3 +16,43 @@ body::after{content:'';position:fixed;inset:0;background:linear-gradient(180deg,
 table{color:var(--text);} table.dataframe{background:transparent;}
 table.dataframe th,table.dataframe td{background:rgba(0,0,0,0.25);border-color:rgba(255,255,255,0.14);}
 .badge-score{padding:2px 10px;border-radius:999px;border:1px solid var(--glass-border);} .badge-high{color:#0be881;} .badge-review{color:#ffd32a;} .badge-low{color:#ff5e57;}
+/* --- Force white text inside all glass cards --- */
+.glass,
+.glass *:not(input):not(select):not(textarea):not(.form-control):not(.form-select) {
+  color: var(--text) !important;
+}
+
+/* Headings, labels, links, badges, tables inside glass */
+.glass h1, .glass h2, .glass h3, .glass h4, .glass h5, .glass h6,
+.glass p, .glass label, .glass .form-label,
+.glass a, .glass a:hover, .glass .link,
+.glass .badge, .glass table, .glass th, .glass td {
+  color: var(--text) !important;
+}
+
+/* Keep input text dark because those controls have white backgrounds */
+.glass input,
+.glass select,
+.glass textarea,
+.glass .form-control,
+.glass .form-select {
+  color: #111 !important;
+  background-color: #fff;      /* ensure readable contrast */
+  border-color: rgba(255,255,255,0.35);
+}
+.glass input::placeholder,
+.glass textarea::placeholder { color: #666; }
+
+/* Buttons still follow brand, with white text */
+.glass .btn,
+.glass .btn-primary {
+  color: var(--text) !important;
+}
+
+/* Pandas table (render.table) — make sure cells stay readable */
+table.dataframe { background: transparent; }
+table.dataframe th, table.dataframe td {
+  color: var(--text) !important;
+  background: rgba(0,0,0,0.25);
+  border-color: rgba(255,255,255,0.14);
+}
