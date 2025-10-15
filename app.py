@@ -3,6 +3,10 @@ import io, pandas as pd
 from shiny import App, ui, render, reactive
 from parsers.sedi_weekly_pdf import parse_sedi_pdf
 from matching.matcher import match_transactions_to_donors, Thresholds
+from pathlib import Path
+
+APP_DIR = Path(__file__).parent.resolve()
+STATIC_DIR = APP_DIR / "www"   # absolute path to your static folder
 
 app_title = "SEDI Insider Monitor"
 
@@ -91,4 +95,4 @@ def server(input, output, session):
         cols = ['status','score','insider_name','donor_name','issuer','date_tx','nature','security','qty_or_value','tx_id']
         cols = [c for c in cols if c in df.columns]
         return df[cols].sort_values(['status','score'], ascending=[True, False])
-app = App(page, server, static_assets="www")
+app = App(page, server, static_assets=str(STATIC_DIR))
