@@ -58,7 +58,6 @@ def server(input, output, session):
     transactions_df = reactive.value(pd.DataFrame())
     matches_df = reactive.value(pd.DataFrame())
     status_txt = reactive.value("Awaiting files.")
-    @reactive.event(input.parse)
     
     @reactive.event(input.parse)
     def _do_parse():
