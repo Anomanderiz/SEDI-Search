@@ -59,6 +59,7 @@ def server(input, output, session):
     matches_df = reactive.value(pd.DataFrame())
     status_txt = reactive.value("Awaiting files.")
     
+    @reactive.effect
     @reactive.event(input.parse)
     def _do_parse():
         try:
