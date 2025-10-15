@@ -1,3 +1,19 @@
+/* Ensure UI elements receive clicks above any glass/overlay decorations */
+.glass::before,
+.glass::after { pointer-events: none !important; }
+
+button, .btn, #parse_btn,
+.card, .navbar, .container-fluid {
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 2;
+}
+
+/* If you use a full-screen background layer, make it immune to clicks */
+#app-background, .bg-cover, .page-bg {
+  pointer-events: none !important;
+}
+
 :root{
   --major:#CC0633; --accent:#A6192E; --text:#ffffff;
   --glass-bg: rgba(204,6,51,0.22);
