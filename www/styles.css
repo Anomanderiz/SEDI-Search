@@ -56,3 +56,37 @@ table.dataframe th, table.dataframe td {
   background: rgba(0,0,0,0.25);
   border-color: rgba(255,255,255,0.14);
 }
+/* --- Candidate matches table: hard-fix column alignment --- */
+table.dataframe {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: fixed;                  /* single column map for head/body */
+}
+
+/* Undo any flex/grid/block overrides that were applied earlier */
+table.dataframe thead { display: table-header-group !important; }
+table.dataframe tbody { display: table-row-group !important; }
+table.dataframe thead tr,
+table.dataframe tbody tr { display: table-row !important; }
+table.dataframe th,
+table.dataframe td { display: table-cell !important; }
+
+/* Consistent cell padding so visual centring doesn’t “shift” headers */
+table.dataframe th,
+table.dataframe td {
+  padding: 0.5rem 0.75rem;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* Optional: make numeric columns right-aligned (doesn’t affect layout) */
+table.dataframe th:nth-last-child(2),   /* Unit Price */
+table.dataframe td:nth-last-child(2),
+table.dataframe th:nth-last-child(1),   /* tx_id */
+table.dataframe td:nth-last-child(1),
+table.dataframe th:nth-child(9),        /* qty_or_value (adjust index if needed) */
+table.dataframe td:nth-child(9) {
+  text-align: right;
+}
+
