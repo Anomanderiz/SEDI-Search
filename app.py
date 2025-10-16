@@ -156,13 +156,46 @@ def server(input, output, session):
         d = donors_df(); t = transactions_df(); m = matches_df()
         if t.empty: return "Awaiting files."
         return f"Donors: {len(d)} | Transactions parsed: {len(t)} | Candidate matches: {len(m)}"
+    
     @render.table
     def tbl_matches():
         m = matches_df()
-        if m.empty: return pd.DataFrame()
+        if m.empty:
+            return pd.DataFrame()
+
         df = m.copy()
-        if not input.show_low(): df = df[df['status'] != 'low']
-        cols = ['status','score','insider_name','donor_name','issuer','date_tx','nature','security','qty_or_value','tx_id']
-        cols = [c for c in cols if c in df.columns]
-        return df[cols].sort_values(['status','score'], ascending=[True, False])
+
+        # Hide low-confidence rows unless explicitly shown
+        if not input.show_low() and "status" in df.columns:
+            df = df[df["status"] != "low"]
+
+        # Find whatever the parser called the unit price
+        price_aliases = [
+            "unit_price",
+            "unit_or_exercise_price",
+            "unit_price_or_exercise_price",
+            "exercise_price",
+            "price",
+            "unitprice",
+        ]
+        unit_col = next((c for c in price_aliases if c in df.columns), None)
+
+        # Column order (status removed), with Unit Price inserted just before tx_id
+        base = ["score", "insider_name", "donor_name", "issuer",
+                "date_tx", "nature", "security", "qty_or_value"]
+        display_cols = [c for c in base if c in df.columns]
+
+        if unit_col:
+            df = df.rename(columns={unit_col: "Unit Price"})
+            display_cols.append("Unit Price")
+
+        if "tx_id" in df.columns:
+            display_cols.append("tx_id")
+
+        # Sort by score (desc) now that 'status' is not displayed
+        if "score" in df.columns:
+            df = df.sort_values(["score"], ascending=[False])
+
+        return df[display_cols]
+
 app = App(page, server, static_assets=str(STATIC_DIR))
