@@ -11,6 +11,8 @@ ISSUER_RE = re.compile(r"^Issuer:\s*(.+)$", re.IGNORECASE)
 REL_RE = re.compile(r"^Insider[’']s Relationship to Issuer:\s*(.+)$", re.IGNORECASE)
 TXLINE_RE = re.compile(r"^(?P<txid>\d{6,9})\s+(?P<rest>.*)$")  # start of a transaction row
 DATE_RE = re.compile(r"(20\d{2}-\d{2}-\d{2})")
+PRICE_RE = re.compile(r"\b\d+(?:\.\d{3,4})\b")
+
 
 def parse_sedi_pdf(pdf_bytes: bytes) -> pd.DataFrame:
     """Best-effort parser for SEDI Weekly Summary by Insider.
@@ -80,6 +82,12 @@ def parse_sedi_pdf(pdf_bytes: bytes) -> pd.DataFrame:
                     if m_nat:
                         nature = m_nat.group(1).strip()
 
+                    # try to extract unit / conversion prices (tables usually show two 4-dp decimals)
+                    prices = PRICE_RE.findall(rest)
+                    unit_price = prices[0] if prices else None
+                    conv_price = prices[1] if len(prices) > 1 else None
+
+
                     records.append({
                         'tx_id': tx_id,
                         'insider_name': insider,
@@ -89,6 +97,8 @@ def parse_sedi_pdf(pdf_bytes: bytes) -> pd.DataFrame:
                         'nature': nature,
                         'security': security,
                         'qty_or_value': qty_or_value,
+                        'unit_or_exercise_price': unit_price,
+                        'conversion_or_exercise_price': conv_price,
                     })
     df = pd.DataFrame.from_records(records)
     # Drop obvious empties and de-duplicate
