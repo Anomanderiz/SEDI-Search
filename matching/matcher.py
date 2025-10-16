@@ -93,5 +93,7 @@ def match_transactions_to_donors(transactions: pd.DataFrame, donors: pd.DataFram
             'security': t.get('security'),
             'qty_or_value': t.get('qty_or_value'),
             'breakdown': best_breakdown,
+            'unit_or_exercise_price': t.get('unit_or_exercise_price'),
+
         })
     return pd.DataFrame(rows)
