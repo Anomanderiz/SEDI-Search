@@ -89,4 +89,44 @@ table.dataframe th:nth-child(9),        /* qty_or_value (adjust index if needed)
 table.dataframe td:nth-child(9) {
   text-align: right;
 }
+/* ===== Fix header/body misalignment for Candidate matches ===== */
+
+/* 1) Use classic table layout so head/body share the same column map */
+table.dataframe {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: fixed;
+}
+
+/* 2) Ensure thead/tbody are real table groups (not flex/grid/blocks) */
+table.dataframe thead { display: table-header-group !important; }
+table.dataframe tbody { display: table-row-group !important; }
+table.dataframe tr    { display: table-row !important; }
+table.dataframe th,
+table.dataframe td    { display: table-cell !important; box-sizing: border-box; }
+
+/* 3) Normalise spacing — the theme gives TH extra indent/padding */
+table.dataframe th,
+table.dataframe td {
+  padding: 8px 12px !important;   /* SAME on th and td */
+  border: none !important;
+  text-indent: 0 !important;      /* kill any header indent */
+  vertical-align: middle;
+  white-space: nowrap;
+  text-align: left;               /* default alignment */
+}
+
+/* 4) Numeric columns right-aligned (purely cosmetic) */
+table.dataframe th:nth-child(9),
+table.dataframe td:nth-child(9),   /* qty_or_value (adjust index if your order changes) */
+table.dataframe th:nth-last-child(2),
+table.dataframe td:nth-last-child(2), /* Unit Price */
+table.dataframe th:nth-last-child(1),
+table.dataframe td:nth-last-child(1)  /* tx_id */
+{ text-align: right !important; }
+
+/* 5) Remove any decorative pseudo-elements that shift header text */
+table.dataframe thead th::before,
+table.dataframe thead th::after { content: none !important; }
 
