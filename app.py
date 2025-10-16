@@ -69,7 +69,8 @@ page = ui.page_navbar(
     ui.nav_panel("About", ui.layout_columns(
         ui.card(
             ui.h4("About this tool", class_='card-title'),
-            ui.markdown("This app, brought to you by the genius of the Prospect Research Team, analyses weekly summaries of insider transactions ppublished by SEDI Canada and highlights transactions made by a roster of people of interest.\nIdenitifying potential donors who have made large sales of stock quickly will enable our fundraisers to solicit them at the right moment and thereby increase our rates of success for major gifts."),
+            ui.markdown("This app, brought to you by the genius of the Prospect Research Team, analyses weekly summaries of insider transactions ppublished by SEDI Canada and highlights transactions made by a roster of people of interest.\n
+            Idenitifying potential donors who have made large sales of stock quickly will enable our fundraisers to solicit them at the right moment and thereby increase our rates of success for major gifts."),
             class_="glass",
         ),
         col_widths=(12,)
