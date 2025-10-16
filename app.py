@@ -163,13 +163,13 @@ def server(input, output, session):
         if m.empty:
             return pd.DataFrame()
 
-        df = m.copy()
+        df = m.copy().reset_index(drop=True)
 
         # Hide low-confidence rows unless explicitly shown
         if not input.show_low() and "status" in df.columns:
             df = df[df["status"] != "low"]
 
-        # Find whatever the parser called the unit price
+        # Find whatever the upstream called the unit price and normalise the label
         price_aliases = [
             "unit_price",
             "unit_or_exercise_price",
@@ -179,23 +179,26 @@ def server(input, output, session):
             "unitprice",
         ]
         unit_col = next((c for c in price_aliases if c in df.columns), None)
+        if unit_col:
+            df = df.rename(columns={unit_col: "Unit Price"})
+        else:
+            # ensure the column exists so headers stay aligned
+            df["Unit Price"] = ""
 
-        # Column order (status removed), with Unit Price inserted just before tx_id
+        # Desired order (note: no “status”), with “Unit Price” placed just before tx_id
         base = ["score", "insider_name", "donor_name", "issuer",
                 "date_tx", "nature", "security", "qty_or_value"]
         display_cols = [c for c in base if c in df.columns]
 
-        if unit_col:
-            df = df.rename(columns={unit_col: "Unit Price"})
-            display_cols.append("Unit Price")
-
+        display_cols.append("Unit Price")
         if "tx_id" in df.columns:
             display_cols.append("tx_id")
 
-        # Sort by score (desc) now that 'status' is not displayed
+        # Sort by score descending for readability
         if "score" in df.columns:
             df = df.sort_values(["score"], ascending=[False])
 
         return df[display_cols]
+
 
 app = App(page, server, static_assets=str(STATIC_DIR))
